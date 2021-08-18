@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="6bdaa31cab824cfcb131485eea307b86" Name="Diagram1" ZoomLevel="106">
+        <EntityTypeShape EntityType="BiccTyresModel.Category" Width="1.5" PointX="4.625" PointY="3.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="BiccTyresModel.PaymentType" Width="1.5" PointX="6.375" PointY="2.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="BiccTyresModel.TransactionType" Width="1.5" PointX="6.375" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BiccTyresModel.ItemBrand" Width="1.5" PointX="6.375" PointY="4" />
+        <EntityTypeShape EntityType="BiccTyresModel.Account" Width="1.5" PointX="0.5" PointY="3.875" />
+        <EntityTypeShape EntityType="BiccTyresModel.ServiceCategory" Width="1.5" PointX="2.875" PointY="3.875" />
+        <EntityTypeShape EntityType="BiccTyresModel.Service" Width="1.5" PointX="8.125" PointY="2.875" />
+        <EntityTypeShape EntityType="BiccTyresModel.OrderDetail" Width="1.5" PointX="2.875" PointY="0.5" />
+        <EntityTypeShape EntityType="BiccTyresModel.Order" Width="1.5" PointX="0.625" PointY="0.5" />
+        <EntityTypeShape EntityType="BiccTyresModel.Transaction" Width="1.5" PointX="8.125" PointY="0.5" />
+        <AssociationConnector Association="BiccTyresModel.FK_OrderDetails_Orders" />
+        <EntityTypeShape EntityType="BiccTyresModel.Item" Width="1.5" PointX="4.625" PointY="0.5" />
+        </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

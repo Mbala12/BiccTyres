@@ -1,0 +1,315 @@
+﻿@model Tuple<IEnumerable<SelectListItem>, IEnumerable<SelectListItem>, IEnumerable<SelectListItem>>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#Item').val(0);
+
+        $("#btnSave").click(function () {
+            AddItem();
+            LoadItemDetailsInStock();
+            $("#divLoadItemHaveSold").hide();
+        });
+
+        $("#btnClose").click(function () {
+            LoadItemDetailsInStock();
+        });
+
+        $("#btnItemInStock").click(function () {
+            $("#divLoadItemInStock").show();
+            $('#divLoadItemHaveSold').hide();
+            $("#divLoadQuantityAvailable").hide();
+            LoadItemDetailsInStock();
+        });
+        //  
+        $('#btnItemHaveSold').click(function () {
+            $("#divLoadItemInStock").hide();
+            $('#divLoadItemHaveSold').show();
+            $("#divLoadQuantityAvailable").hide();
+            LoadItemDetailsHaveSold();
+        });
+
+        $("#btnQtyAvailable").click(function () {
+            $("#divLoadQuantityAvailable").show();
+            $("#divLoadItemInStock").hide();
+            $('#divLoadItemHaveSold').hide();
+            LoadQuantityAvailable();
+        });
+    });
+    function DisplayImage(result) {
+        if (result.files && result.files[0]) {
+            var fileReader = new FileReader();
+            fileReader.onload = function (e) {
+                $("#ImgItem").attr('src', e.target.result);
+            }
+            fileReader.readAsDataURL(result.files[0]);
+        }
+    }
+
+    function ResetFields() {
+        $('#Item').val(0);
+        $("#textItemName").val('');
+        $("#textItemSize").val('');
+        $("#textItemPrice").val('');
+        $("#textQty").val('');
+        $("#textImage").val('');
+        $("#ImgItem").removeAttr('src');
+        $("#textItemName").focus();
+        $('#btnSave').text("Save");
+    }
+
+    function AddItem() {
+        var formData = new FormData;
+        formData.append("ItemID", $('#Item').val());
+        formData.append("CategoryID", $("#Category").val());
+        formData.append("ItemSize", $("#textItemSize").val());
+        formData.append("ItemBrandID", $("#Brand").val());
+        formData.append("ItemName", $("#textItemName").val());
+        formData.append("Operator", $("#textOperator").val());
+        formData.append("ItemPrice", $("#textItemPrice").val());
+        formData.append("ImagePath", $("#textImage").get(0).files[0]);
+        formData.append("Quantity", $("#textQty").val());
+
+        if ($("#textItemName").val() == '') {
+            alert('Please Enter an Item Name'); $("#textItemName").focus();
+        }
+        else if ($("#textItemPrice").val() == '') {
+            alert('Please Enter a Item Price'); $("#textItemPrice").focus();
+        }
+        else if ($('#textQty').val() == '') {
+            alert('Please Enter a Quantity'); $("#textQty").focus();
+        }
+        else {
+            $.ajax({
+                async: true,
+                type: 'POST',
+                contentType: false,
+                processData: false,
+                data: formData,
+                success: function (data) {
+                    if (data.success === true) {
+                        alert(data.message);
+                        ResetFields();
+                        LoadItemDetailsInStock();
+                    }
+                },
+                error: function () {
+                    alert('There is some problem to process your request. Please try some other time.');
+                }
+            });
+        }
+    }
+
+    function LoadItemDetailsInStock() {
+
+        $.ajax({
+            async: true,
+            data: 'GET',
+            dataType: 'HTML',
+            contentType: false,
+            processData: false,
+            url: '/Item/GetAllItemsInStock',
+            success: function (data) {
+                $("#divLoadItemInStock").html(data);
+            },
+            error: function () {
+                alert('There is some problem to process your request. Please try some other time.');
+            }
+        });
+    }
+
+    function LoadItemDetailsHaveSold() {
+
+        $.ajax({
+            async: true,
+            data: 'GET',
+            dataType: 'HTML',
+            contentType: false,
+            processData: false,
+            url: '/Item/GetAllItemsHaveSold',
+            success: function (data) {
+                $("#divLoadItemHaveSold").html(data);
+            },
+            error: function () {
+                alert('There is some problem to process your request. Please try some other time.');
+            }
+        });
+    }
+
+    function LoadQuantityAvailable() {
+
+        $.ajax({
+            async: true,
+            data: 'GET',
+            dataType: 'HTML',
+            contentType: false,
+            processData: false,
+            url: '/Item/ShowQuantityAvailable',
+            success: function (data) {
+                $("#divLoadQuantityAvailable").html(data);
+            },
+            error: function () {
+                alert('There is some problem to process your request. Please try some other time.');
+            }
+        });
+    }
+
+    function RemoveItem(itemID) {
+        var result = confirm('Are you sure you wanna delete this Item ?');
+        if (result === false) {
+            return false;
+        }
+        else {
+            $.ajax({
+                async: true,
+                dataType: 'JSON',
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: { itemID: itemID },
+                url: '/Item/RemoveItemDetails',
+                success: function (data) {
+                    if (data.success === true) {
+                        alert(data.message);
+                        LoadItemDetailsInStock();
+                    }
+                },
+                error: function () {
+                    alert('There is some problem to process your request. Please try some other time.');
+                }
+            });
+        }
+    }
+
+    function EditItem(itemID) {
+        $.ajax({
+            async: true,
+            dataType: 'JSON',
+            type: 'GET',
+            contentType: 'application/json; charset=utf-8',
+            data: { itemID: itemID },
+            url: '/Item/EditItemDetails',
+            success: function (data) {
+                console.log(data);
+                $('#textItemName').val(data.ItemName);
+                $('#textItemPrice').val(parseFloat(data.ItemPrice).toFixed(2));
+                //$("#textQty").val(parseFloat(data.Quantity).toFixed(2));
+                $('#Category').val(data.CategoryID);
+                $("#Size").val(data.ItemSizeID);
+                $("#Brand").val(data.ItemBrandID);
+                $("#ImgItem").attr('src', "../Images/" + data.ImagePath);
+                $('#Item').val(data.ItemID);
+                $('#btnSave').text("Update");
+                $('#divAddItem').modal({ show: true });
+            },
+            error: function () {
+                alert('There is some problem to process your request. Please try some other time.');
+            }
+        });
+    }
+
+</script>
+
+<h2 class="text-center text-uppercase">BICC TYRES & WHEELS - Main Activities </h2>
+
+<div style="margin-bottom:55px"></div>
+
+<div class="container" style="margin-top: 15px; font-family:'Century Gothic'">
+    <div class="row">
+        <div class="form-group col-md-3">
+            <button type="button" id="btnItemInStock" class="btn btn-primary" data-toggle="modal" data-target="#divAddItem" data-keyboard="false" data-backdrop="static">Add Item</button>
+        </div>
+        <div class="form-group col-md-3">
+            <button type="button" id="btnQtyAvailable" class="btn btn-success">Check Stock</button>
+        </div>
+        <div class="form-group col-md-3">
+            <button type="button" id="btnItemHaveSold" class="btn btn-success">Items Sold</button>
+        </div>
+    </div>
+</div>
+
+<div id="divAddItem" class="modal fade" role="dialog" style="font-family:'Century Gothic'">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Add New Item</h4>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    @Html.HiddenFor(model => model.Item2, new { @id = "Item" })
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group col-md-6">
+                                <b>Category :</b>
+                                @Html.DropDownList("Category", new SelectList(Model.Item1, "Value", "Text"), new { @class = "form-control" })
+                            </div>
+                            <div class="form-group col-md-6">
+                                <b>Item Brand :</b>
+                                @Html.DropDownList("Brand", new SelectList(Model.Item3, "Value", "Text"), new { @class = "form-control" })
+                            </div>
+                            <div class="form-group col-md-6" hidden>
+                                <b>Operator :</b>
+                                <input type="text" id="textOperator" readonly="readonly" value='@Session["username"]' name="Operator" class="form-control" autocomplete="off" style="text-transform:uppercase" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group col-md-6">
+                                <b>Item Size :</b>
+                                <input type="text" id="textItemSize" placeholder="Please enter the Item Size" name="ItemName" class="form-control" autocomplete="off" style="text-transform:uppercase" />
+                            </div>
+                            <div class="form-group col-md-6">
+                                <b>Item Name :</b>
+                                <input type="text" id="textItemName" placeholder="Please enter the Item Name" name="ItemName" class="form-control" autocomplete="off" style="text-transform:uppercase" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group col-md-6">
+                                <b>Quantity :</b>
+                                <input type="text" id="textQty" placeholder="0.00" name="Quantity" class="form-control" autocomplete="off" />
+                            </div>
+                            <div class="form-group col-md-6">
+                                <b>Item Price :</b>
+                                <input type="text" id="textItemPrice" placeholder="0.00" name="ItemPrice" class="form-control" autocomplete="off" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group col-md-6">
+                                <b>Item Image :</b>
+                                <input type="file" id="textImage" placeholder="Load Image" name="ImagePath" class="form-control" onchange="DisplayImage(this)" />
+                                @*<img id="ImgItem" height="200" width="250" style="border: solid; margin-top: 15px" />*@
+                            </div>
+                            <div class="form-group col-md-6">
+                                @*<b>Item Photo :</b>*@
+                                <img id="ImgItem" height="200" width="250" style="border: solid; margin-top: 15px" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnSave" class="btn btn-success">Save</button> &nbsp;
+                <button type="button" id="btnClose" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div style="margin-bottom:15px"></div>
+
+<div id="divLoadItemInStock"></div>
+
+<div id="divLoadItemHaveSold"></div>
+
+<div id="divLoadQuantityAvailable"></div>

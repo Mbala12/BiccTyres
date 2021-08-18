@@ -1,0 +1,67 @@
+﻿@*@using PagedList.Mvc
+@using PagedList*@
+
+@model IEnumerable<OnlineSales.ViewModels.ServiceViewModel>
+
+<script src="~/Scripts/bootstrap.min.js"></script>
+
+<table style="width: 100%" class="table table-striped">
+    <thead class="bg-primary" style="font-family:'Century Gothic'">
+        <tr>
+            <th rowspan="2">
+                Information about the Customer
+            </th>
+        </tr>
+        <tr>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody style="font-family:'Century Gothic'">
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td rowspan="2"></td>
+            </tr>
+            <tr >
+                <td>
+                    @item.OrderNumber
+                </td>
+                <td>
+                    @item.CreatedOn
+                </td>
+                <td>
+                    @item.CustFullName.ToUpper()
+                </td>
+                <td>
+                    @item.CustPhone
+                </td>
+                <td>
+                    @item.UnitPrice
+                </td>
+                <td>
+                    @item.Quantity
+                </td>
+                <td>
+                    @item.SubTotal
+                </td>
+                <td>
+                    @item.Operator.ToUpper()
+                </td>
+                <td>
+                    @item.LicenseNo.ToUpper()
+                </td>
+                <td>
+                    @item.ODOMeter Km/h
+                </td>
+                <td>
+                    @item.VIN.ToUpper()
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@*@Html.PagedListPager((IPagedList)Model, i => Url.Action("GetAlignmentDetails", new { i }), PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new AjaxOptions() { HttpMethod = "GET", UpdateTargetId = "divLoadAlignment" }))*@
+
+

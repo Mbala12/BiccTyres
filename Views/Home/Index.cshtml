@@ -1,0 +1,584 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="~/Content/main/css/style.css">
+    <title>BICC TYRES &amp; MAG REPAIRS</title>
+</head>
+<body>
+    <!-- Start Header Section -->
+    <header>
+        <div class="container">
+            <div class="row">
+                <div class="brand-name">
+                    <a href="#home" class="logo"><img src="~/Content/main/images/logo/logo.png" alt="logo" /></a>
+                </div>
+                <div class="ham-burger">
+                    <i class="fa fa-bars"></i>
+                </div>
+                <div class="navbar">
+                    <ul>
+                        <li><a href="#home" class="active">Home</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#service">Services</a></li>
+                        <li><a href="#portfolio">Portfolio</a></li>
+                        <li><a href="#blog">Team</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- End Header Section -->
+    <!-- Start Home Section -->
+    <section class="home" id="home">
+        <div class="container">
+            <div class="row full-screen">
+                <div class="home-content">
+                    <div class="block">
+                        <h6>Welcome Everyone at</h6>
+                        <h1>Bicc Tyres &amp; Mag Repairs</h1>
+                        <h3>We sell tyres & wheels for your vehicles</h3>
+                        <div class="cv-btn">
+                            @Html.ActionLink("Login as Admin", "Index", "Service")
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Home Section -->
+    <!-- Start About Section -->
+    <section class="about-me" id="about">
+        <div class="container">
+            <div class="row">
+                <div class="section-title">
+                    <h1>About Us</h1>
+                    <p class="small text-uppercase">Information About Us</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="about-content">
+                    <div class="row">
+                        <div class="img">
+                            <img src="~/Content/main/images/about/about-me.jpg" alt="about-me" />
+                        </div>
+                        <div class="text">
+                            <h4>Bicc Tyres &amp; Mag Repairs</h4>
+                            <h6>We are <span>Bicc Tyres</span> &amp; <span>Mag Repairs</span>, a shop that sells <span>Tyres </span> & <span>Wheels </span> for your vehicles.</h6>
+                            <p>
+                                We are actually based in Pretoria West within the province of Gauteng in South Africa. We have a reputation for
+                                delivering the very best service. We stock only leading brands of High performance tyres and we are the preferred
+                                dealer for Falken tyres. Our range also include Michelin, Pirelli, Dunlop, Archilles, Bridgestone and Firenza.
+                                Bicc Tyres &amp; Mag Repairs specialises in the supply of high-end, exotic wheels ranging from 13 inch up to 22 inch, as well as a
+                                special range of wheels designed and made specifically for “bakkies”.<br /><br />
+                                We only stock original wheel brands (no replicas) and none of our wheels are imported from China. BICC Tyres &amp; Mag Repairs is
+                                more than just an ordinary retailer in that we create and set our own trends, rather than simply following the
+                                “mass” in the wheel market.
+                            </p>
+                            <div class="info">
+                                <div class="list">
+                                    <label>Phone No. :</label>
+                                    <p>
+                                        (+27) 764-544-272
+                                    </p>
+                                </div>
+                                <div class="list">
+                                    <label>Physical Address :</label>
+                                    <p>481 WF Nkomo Street, Pretoria West, Pretoria</p>
+                                </div>
+                                <div class="list">
+                                    <label>Email Address :</label>
+                                    <p>info@bicctyres.com</p>
+                                </div>
+                                <div class="list">
+                                    <label>Country :</label>
+                                    <p>South Africa</p>
+                                </div>
+                            </div>
+                            <div class="social-links">
+                                <a href="http://facebook.com/BiccTyres"><i class="fa fa-facebook"></i></a>
+                                <a href="http://instagram.com/bianda.eric"><i class="fa fa-instagram"></i></a>
+                                <a href="https://wa.me/0764544272"><i class="fa fa-whatsapp"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End About Section -->
+    <!-- Start Services Section -->
+    <section class="services" id="service">
+        <div class="container">
+            <div class="row">
+                <div class="section-title text-center">
+                    <h1>Our Services</h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="service-content">
+                    <div class="box">
+                        <div class="icon">
+                            <i class="fa fa-columns"></i>
+                        </div>
+                        <h5>REAR DISCS BRAKES</h5>
+                        <p>
+                            Rear Brake Discs are basically the same thing as front-wheel
+                            disc brakes. They consist of three main parts: brake pads, a
+                            caliper and a rotor. Brake pads are located each side of the
+                            rotor and are actually pushed against the rotor to stop the
+                            wheel and thereby stop your vehicle.
+                        </p>
+                    </div>
+                    <div class="box">
+                        <div class="icon">
+                            <i class="fa fa-cog"></i>
+                        </div>
+                        <h5>TIE ROD END</h5>
+                        <p>
+                            Tie Rod End is attached at the tip of the tie rod and connects
+                            the wheels of the vehicle with the steering and suspension
+                            components that permit the vehicle to steer. Tie rod ends can
+                            wear out due to impact, constant use on bumpy roads, or simple
+                            age.
+                        </p>
+                    </div>
+                    <div class="box">
+                        <div class="icon">
+                            <i class="fa fa-mobile"></i>
+                        </div>
+                        <h5>BALL JOINTS</h5>
+                        <p>
+                            Ball Joints are spherical bearings that connect the control
+                            arms to the steering knuckles. They are used on virtually every
+                            automobile made and work similarly to the ball-and-socket design
+                            of the human hip joint. A protective encasing prevents dirt from
+                            getting into the joint.
+                        </p>
+                    </div>
+                    <div class="box">
+                        <div class="icon">
+                            <i class="fa fa-search"></i>
+                        </div>
+                        <h5>WHEEL BEARING</h5>
+                        <p>
+                            Wheel Bearing is a set of steel balls held together in a metal
+                            ring, called a race. At the center of your wheels, there is a
+                            hollow piece of metal, called a hub. The wheel bearings fit
+                            tighty inside this hub, and ride on a metal axle shaft, helping
+                            reduce friction when the wheel soins.
+                        </p>
+                    </div>
+                    <div class="box">
+                        <div class="icon">
+                            <i class="fa fa-laptop"></i>
+                        </div>
+                        <h5>BRAKE DISCS</h5>
+                        <p>
+                            Brake Discs are responsible for stopping your vehicle. They
+                            consist of three main parts: brake pads, a caliper, and a
+                            rotor. Brake pads are located on each side of the rotor and
+                            are actually pushed against the rotor to stop the wheel and
+                            thereby stopping your vehicle.
+                        </p>
+                    </div>
+                    <div class="box">
+                        <div class="icon">
+                            <i class="fa fa-cog"></i>
+                        </div>
+                        <h5>WHEEL BALANCING</h5>
+                        <p>
+                            It is a tune-up for your wheel tire set. When all areas of the 
+                            wheel tire unit are as equal in weight as possible, the tire
+                            will roll smoothly. This helps it wear evenly for longest life.
+                            Balancing also contributes to ride comfort: Imbalanced tires will
+                            wobble or hop up and down, which causes vibration.
+                        </p>
+                    </div>
+                    <div class="box">
+                        <div class="icon">
+                            <i class="fa fa-columns"></i>
+                        </div>
+                        <h5>STEARING RACK</h5>
+                        <p>
+                            Stearing Rack is a type of linear actuator that comprises a
+                            circular gear engaging a linear gear, which operate to
+                            translate rotational motion into linear motion. Driving the
+                            pinion into rotation causes the rack to be driven linearly.
+                            Driving the rack linearly will cause the pinion to be driven
+                            into a rotation.
+                        </p>
+                    </div>
+                    <div class="box">
+                        <div class="icon">
+                            <i class="fa fa-mobile"></i>
+                        </div>
+                        <h5>WHEEL ALIGNMENT</h5>
+                        <p>
+                            Wheel ALignment aims to reduce tire wear and to ensure that
+                            the vehicle travel is straight and true (without "pulling"
+                            to one side). Alignment angles can also be altered beyond the
+                            maker's specifications to obtain a specific handling characteristic.
+                            Motorsport and off-road applications may call for angles to be
+                            adjusted well beyond normal for a variety of reasons.
+                        </p>
+                    </div>
+                    <div class="box">
+                        <div class="icon">
+                            <i class="fa fa-code"></i>
+                        </div>
+                        <h5>CV JOINTs</h5>
+                        <p>
+                            CV Joints allow a drive shaft to transmit power through a
+                            variable angle, at constant rotational speed, without an
+                            appreciable increase in friction or play. CV Joints are
+                            mainly used in front wheel drive vehicles. Modern rear wheel
+                            drive cars with independent rear suspension typically use CV
+                            Joints at the ends of the rear axle halfshafts and increasingly
+                            use them on the drive.
+                        </p>
+                    </div>
+                    <div class="box">
+                        <div class="icon">
+                            <i class="fa fa-search"></i>
+                        </div>
+                        <h5>MAG-RIM REPAIR</h5>
+                        <p>
+                            Wide Range of Alloy Repairs available from Pothole damage to
+                            Pavement scratches. Affordable Alloy Rim Repairs Re-Mag Wheels
+                            Repair All damaged Alloy Rims. Loan rims. Straightening Rims.
+                        </p>
+                    </div>
+                    <div class="box">
+                        <div class="icon">
+                            <i class="fa fa-laptop"></i>
+                        </div>
+                        <h5>TYRE PUNCTURE</h5>
+                        <p>
+                            A puncture is a small hole in a car tyre or bicycle tyre that
+                            has been made by a sharp object. If a car tyre or bicycle tyre
+                            punctures it, a hole is made in the tyre.
+                        </p>
+                    </div>
+                    <div class="box">
+                        <div class="icon">
+                            <i class="fa fa-code"></i>
+                        </div>
+                        <h5>ONE DAY SERVICES</h5>
+                        <p>
+                            Our assistance also in One Day Services like changing oil,
+                            filter, minor mechanical faults and all other service related.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Services Section -->
+    <!-- Start Portfolio Section -->
+    <section class="portfolio" id="portfolio">
+        <div class="container">
+            <div class="row">
+                <div class="section-title text-center">
+                    <h1>Our Gallery</h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="filter-buttons">
+                    <ul id="filter-btns">
+                        <li class="active" data-target="all">All</li>
+                        <li data-target="NewTyre">New Tyres</li>
+                        <li data-target="NewWheel">New Wheels</li>
+                        <li data-target="UsedTyre">Used Tyres</li>
+                        <li data-target="UsedWheel">Used Wheels</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row">
+                <div class="portfolio-gallery">
+                    <div class="item" data-id="NewTyre">
+                        <div class="inner">
+                            <img src="~/Content/main/images/portfolio/New_Tyre_11.jpg" alt="portfolio" />
+                            <div class="overlay">
+                                <span class="fa fa-plus"></span>
+                                <h4>NewTyre</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item" data-id="NewTyre">
+                        <div class="inner">
+                            <img src="~/Content/main/images/portfolio/New_Tyre_33.jpg" alt="portfolio" />
+                            <div class="overlay">
+                                <span class="fa fa-plus"></span>
+                                <h4>New Tyre</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item" data-id="NewTyre">
+                        <div class="inner">
+                            <img src="~/Content/main/images/portfolio/New_Tyre_22.jpg" alt="portfolio" />
+                            <div class="overlay">
+                                <span class="fa fa-plus"></span>
+                                <h4>New Tyre</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item" data-id="NewWheel">
+                        <div class="inner">
+                            <img src="~/Content/main/images/portfolio/New_Wheel_1.jpg" alt="portfolio" />
+                            <div class="overlay">
+                                <span class="fa fa-plus"></span>
+                                <h4>New Wheel</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item" data-id="NewWheel">
+                        <div class="inner">
+                            <img src="~/Content/main/images/portfolio/New_Wheel_2.jpg" alt="portfolio" />
+                            <div class="overlay">
+                                <span class="fa fa-plus"></span>
+                                <h4>New Wheel</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item" data-id="NewWheel">
+                        <div class="inner">
+                            <img src="~/Content/main/images/portfolio/New_Wheel_3.jpg" alt="portfolio" />
+                            <div class="overlay">
+                                <span class="fa fa-plus"></span>
+                                <h4>New Wheel</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item" data-id="UsedWheel">
+                        <div class="inner">
+                            <img src="~/Content/main/images/portfolio/Used_Wheel_1.jpg" alt="portfolio" />
+                            <div class="overlay">
+                                <span class="fa fa-plus"></span>
+                                <h4>Used Wheel</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item" data-id="UsedWheel">
+                        <div class="inner">
+                            <img src="~/Content/main/images/portfolio/Used_Wheel_2.jpg" alt="portfolio" />
+                            <div class="overlay">
+                                <span class="fa fa-plus"></span>
+                                <h4>Used Wheel</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item" data-id="UsedWheel">
+                        <div class="inner">
+                            <img src="~/Content/main/images/portfolio/Used_Wheel_3.jpg" alt="portfolio" />
+                            <div class="overlay">
+                                <span class="fa fa-plus"></span>
+                                <h4>Used Wheel</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item" data-id="UsedTyre">
+                        <div class="inner">
+                            <img src="~/Content/main/images/portfolio/Used_Tyre_2.jpg" alt="portfolio" />
+                            <div class="overlay">
+                                <span class="fa fa-plus"></span>
+                                <h4>Used Tyre</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item" data-id="UsedTyre">
+                        <div class="inner">
+                            <img src="~/Content/main/images/portfolio/Used_Tyre_3.jpg" alt="portfolio" />
+                            <div class="overlay">
+                                <span class="fa fa-plus"></span>
+                                <h4>Used Tyre</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Portofolio Section -->
+    <!-- Start Get in Touch Section -->
+    <section class="message-text">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="text">
+                    <h2>We sell all brands and sizes of Tyres & Wheels of good quality for your vehicles.</h2>
+                </div>
+                <div class="button">
+                    <a href="#contact">Get In Touch</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Get in Touch Section -->
+    <!-- Start Testimonials -->
+    <section class="testimonials" id="blog">
+        <div class="container">
+            <div class="row">
+                <div class="section-title text-center">
+                    <h1>Our Team</h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="testimonials-content">
+                    <div class="testi-slider">
+                        <div class="slide">
+                            <div class="img">
+                                <img src="~/Content/main/images/testimonials/Test1.jpg" alt="testi" />
+                            </div>
+                            <div class="text">
+                                <h6>BLAISE</h6>
+                                <p>CEO</p>
+                                <br />
+                                <p>
+                                    WhatsApp: (+27) 813-252-729
+                                </p>
+                            </div>
+                        </div>
+                        <div class="slide">
+                            <div class="img">
+                                <img src="~/Content/main/images/testimonials/testi1.jpg" alt="testi" />
+                            </div>
+                            <div class="text">
+                                <h6>MALVIN</h6>
+                                <p>SUPERVISOR</p>
+                                <br />
+                                <p>
+                                    WhatsApp: (+27) 632-414-164
+                                </p>
+                            </div>
+                        </div>
+                        <div class="slide">
+                            <div class="img">
+                                <img src="~/Content/main/images/testimonials/testi2.jpg" alt="testi" />
+                            </div>
+                            <div class="text">
+                                <h6>FRANCK</h6>
+                                <p>MANAGER</p>
+                                <br />
+                                <p>
+                                    WhatsApp: (+27) 783-878-025
+                                </p>
+                            </div>
+                        </div>
+                        <div class="slide">
+                            <div class="img">
+                                <img src="~/Content/main/images/testimonials/testi3.jpg" alt="testi" />
+                            </div>
+                            <div class="text">
+                                <h6>HERVE</h6>
+                                <p>COMMERCIAL</p>
+                                <br />
+                                <p>
+                                    WhatsApp: (+27) 717-488-106
+                                </p>
+                            </div>
+                        </div>
+                        <div class="slide">
+                            <div class="img">
+                                <img src="~/Content/main/images/testimonials/Testi4.jpg" alt="testi" />
+                            </div>
+                            <div class="text">
+                                <h6>RICHARD</h6>
+                                <p>LOGISTIC</p>
+                                <br />
+                                <p>
+                                    WhatsApp: (+27) 788-146-615
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- slide controls -->
+                    <div class="slide-controls">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Testimonials-->
+    <!-- Start Blogs Section -->
+    <!-- End Blogs Section -->
+    <!-- Start Contact Section -->
+    <section class="contact-us" id="contact">
+        <div class="container">
+            <div class="row">
+                <div class="section-title text-center">
+                    <h1>Contact Us</h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="contact-form">
+                    <div class="row">
+                        <div class="text">
+                            <h2>Leave Us a Message</h2>
+                            <p>We are here to respond any question you may have</p>
+                        </div>
+                    </div>
+                    <div class="row space-between">
+                        <div class="col-6">
+                            <input type="text" name="" class="form-control" placeholder="Please enter your Full Name" />
+                        </div>
+                        <div class="col-6">
+                            <input type="text" name="" class="form-control" placeholder="Please enter your Email Address" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <textarea class="form-control" placeholder="Your Message"></textarea>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="button text-right">
+                            <a href="">Get In Touch</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Contact Section -->
+    <!-- Start Footer Section -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="logo">
+                    <img src="~/Content/main/images/logo/logo.png" alt="logo" />
+                </div>
+                <div class="social">
+                    <a href="http://facebook.com"><i class="fa fa-facebook"></i></a>
+                    <a href="http://instagram.com/bianda.eric"><i class="fa fa-instagram"></i></a>
+                    <a href="https://wa.me/0764544272"><i class="fa fa-whatsapp"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- End Footer Section -->
+    <!-- Start Copyright Section -->
+    <section class="copyright">
+        <div class="container">
+            <p>
+                &copy; @DateTime.Now.Year Bicc Tyres &amp; Mag Repairs. All Rights Reserved | Design by 
+                <a href="http://www.softechapoulah.com" target="_blank">Apoulah</a>
+            </p>
+        </div>
+    </section>
+    <!-- End opyright Section -->
+    <!-- Start LightBox Section -->
+    <div class="lightbox hide">
+        <span class="close-lightbox fa fa-close"></span>
+        <img src="~/Content/main/images/portfolio/New_Tyre_1.jpg" alt="portfolio" />
+    </div>
+    <!-- End LightBox Section -->
+    <script src="~/Scripts/js/script.js"></script>
+</body>
+</html>

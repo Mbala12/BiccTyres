@@ -1,0 +1,452 @@
+﻿@model Tuple<IEnumerable<SelectListItem>, IEnumerable<SelectListItem>, IEnumerable<SelectListItem>>
+@{
+    ViewBag.Title = "Index";
+}
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#Item").val(0);
+
+        $("#Item").change(function () {
+            var itemID = $("#Item").val();
+            GetItemUnitPrice(itemID);
+        });
+
+        $("input[type=text]").change(function () {
+            CalculateSubTotal();
+            //DisplayImage(this);
+        });
+
+        $("#btnAddToList").click(function () {
+            AddToTheList();
+        });
+
+        $("#btnConfirm").click(function () {
+            ConfirmOrder();
+        });
+
+        $("#Category").change(function () {
+            $.get("/Order/GetSelectedItems", { CategoryID: $("#Category").val() }, function (data) {
+                $("#Item").empty();
+                $.each(data, function (index, row) {
+                    $("#Item").append("<option value='" + row.ItemID + "'>" + row.ItemSize + "</option>");
+                    $("#Item").val(0);
+                });
+            });
+
+        });
+
+    });
+
+
+    function ConfirmOrder() {
+        var result = confirm('Are you done with your Order ?');
+        if (result === false) {
+            return false;
+        }
+        else {
+
+            var ListOfOrderDetailViewModel = [];
+            var objOrderViewModel = {};
+
+            objOrderViewModel.PaymentTypeID = $("#PaymentType").val();
+            objOrderViewModel.FinalTotal = $('#textTotalAmount').val();
+            objOrderViewModel.Operator = $('#textOperator').val();
+
+            $("#tblItemList").find("tr:gt(0)").each(function () {
+                var OrderDetailViewModel = {};
+                OrderDetailViewModel.Total = parseFloat($(this).find("td:eq(7)").text());
+                OrderDetailViewModel.ItemID = $(this).find("td:eq(0)").text();
+                OrderDetailViewModel.UnitPrice = parseFloat($(this).find("td:eq(4)").text());
+                OrderDetailViewModel.Discount = parseFloat($(this).find("td:eq(6)").text());
+                OrderDetailViewModel.Quantity = parseFloat($(this).find("td:eq(5)").text());
+                OrderDetailViewModel.Operator = $('#textOperator').val();
+                ListOfOrderDetailViewModel.push(OrderDetailViewModel);
+            });
+            objOrderViewModel.ListOfOrderDetailViewModel = ListOfOrderDetailViewModel;
+
+            $.ajax({
+                async: true,
+                type: 'POST',
+                dataType: 'JSON',
+                contentType: 'application/json; charset=utf-8',
+                url: '/Order/Index',
+                data: JSON.stringify(objOrderViewModel),
+                success: function (data) {
+                    alert(data);
+                    ResetAllItems();
+                },
+                error: function () {
+                    alert('There is some problem to process your request. Please try some other time.');
+                }
+            });
+        }
+    }
+
+    function RemoveItem(itemID) {
+        $(itemID).closest('tr').remove();
+
+        $("#textTotalAmount").val('0.00');
+        var FinalTotal = 0.00;
+        $("#tblItemList").find('tr:gt(0)').each(function () {
+            var Total = parseFloat($(this).find('td:eq(4)').text());
+            FinalTotal -= Total;
+            //alert(FinalTotal);
+        });
+        $("#textTotalAmount").val(parseFloat((-1) * FinalTotal).toFixed(2));
+
+        if ($("#textTotalAmount").val() == 0) {
+            $("#textTotalAmount").val('0.00');
+        }
+    }
+
+    function AddToTheList() {
+
+        var tblItem = $("#tblItemList");
+        var unitPrice = $("#textUnitPrice").val();
+        var Qty = $("#textQuantity").val();
+        var ItemName = $('#textItemName').val();
+        var ItemBrand = $('#textItemBrand').val();
+        var Discount = $('#textDiscount').val();
+        var itemID = $("#Item").val();
+        var ItemSize = $("#Item option:selected").text();
+        var SubTotal = (unitPrice * Qty) - Discount;
+
+        if ($("#Item option:selected").text() == '') {
+            //toastr.error('Please Pick one Item', 'Error Alert', new { timeOut: 3000 });
+            alert('Please Pick one Item');
+            $("#Item").focus();
+        }
+        else if ($("#textQuantity").val() == '') {
+            //toastr.error('Quantity is empty', 'Error Alert', new { timeOut: 3000 });
+            alert('Quantity is empty');
+            $("#textQuantity").focus();
+        }
+        //else if ($("#textQuantity").val() == '') {
+        //    //toastr.error('Quantity is empty', 'Error Alert', new { timeOut: 3000 });
+        //    alert('Discount is empty');
+        //    $("#textDiscount").focus();
+        //}
+        else {
+            if ($("#textDiscount").val() == '') {
+                var Disc = 0.00;
+                var itemList = "<tr><td hidden>" +
+                    itemID +
+                    "</td><td style='text-align: center; font-weight: bold'>" +
+                    ItemSize +
+                    "</td><td style='text-align: center; font-weight: bold'>" +
+                    ItemName +
+                    "</td><td style='text-align: center; font-weight: bold'>" +
+                    ItemBrand +
+                    "</td><td style='text-align: center; font-weight: bold'>" +
+                    parseFloat(unitPrice).toFixed(2) +
+                    "</td><td style='text-align: center; font-weight: bold'>" +
+                    parseFloat(Qty).toFixed(2) +
+                    "</td><td style='text-align: center; font-weight: bold'>" +
+                    parseFloat(Disc).toFixed(2) +
+                    "</td><td style='text-align: center; font-weight: bold'>" +
+                    parseFloat(SubTotal).toFixed(2) +
+                    "</td><td style='text-align: center'><input type='button' name='Remove' value='X' onclick='RemoveItem(this)' class='btn btn-danger' /></td></tr>";
+
+                tblItem.append(itemList);
+                //alert($("#Item option:selected").text() + ' for R'+ $("#textTotal").val() +' has been added to the List');
+                FinalItemTotal();
+                ResetItem();
+            }
+            else {
+                var itemList = "<tr><td hidden>" +
+                itemID +
+                "</td><td style='text-align: center; font-weight: bold'>" +
+                ItemSize +
+                "</td><td style='text-align: center; font-weight: bold'>" +
+                ItemName +
+                "</td><td style='text-align: center; font-weight: bold'>" +
+                ItemBrand +
+                "</td><td style='text-align: center; font-weight: bold'>" +
+                parseFloat(unitPrice).toFixed(2) +
+                "</td><td style='text-align: center; font-weight: bold'>" +
+                parseFloat(Qty).toFixed(2) +
+                "</td><td style='text-align: center; font-weight: bold'>" +
+                parseFloat(Discount).toFixed(2) +
+                "</td><td style='text-align: center; font-weight: bold'>" +
+                parseFloat(SubTotal).toFixed(2) +
+                "</td><td style='text-align: center'><input type='button' name='Remove' value='X' onclick='RemoveItem(this)' class='btn btn-danger' /></td></tr>";
+
+            tblItem.append(itemList);
+            //alert($("#Item option:selected").text() + ' for R'+ $("#textTotal").val() +' has been added to the List');
+            FinalItemTotal();
+            ResetItem();
+            }
+        }
+    }
+
+    function ResetItem() {
+        $("#textUnitPrice").val('0.00');
+        $('#textItemName').val('');
+        $('#textItemBrand').val('');
+        $("#textQuantity").val('');
+        $("#Item").val(0);
+        $("#ImageItem").removeAttr('src');
+        $("#textTotal").val('0.00');
+        $('#textDiscount').val('');
+    }
+
+    function ResetAllItems() {
+        $("#textUnitPrice").val('0.00');
+        $("#textQuantity").val('');
+        $("#Item").val(0);
+        $("#textTotal").val('0.00');
+        $("#textTotalAmount").val("0.00");
+        $('#textCustName').focus();
+        $('#textItemName').val('');
+        $('#textItemBrand').val('');
+        $('#textDiscount').val('');
+    }
+
+    function FinalItemTotal() {
+        $("#textTotalAmount").val("0.00");
+        var FinalTotal = 0.00;
+        $("#tblItemList").find("tr:gt(0)").each(function () {
+            var Total = parseFloat($(this).find("td:eq(7)").text());
+            FinalTotal += Total;
+        });
+        $("#textTotalAmount").val(parseFloat(FinalTotal).toFixed(2));
+    }
+
+    function CalculateSubTotal() {
+        var unitPrice = $("#textUnitPrice").val();
+        var Qty = $("#textQuantity").val();
+        var Discount = $("#textDiscount").val();
+
+        var SubTotal = (unitPrice * Qty) - Discount;
+        $("#textTotal").val(parseFloat(SubTotal).toFixed(2));
+    }
+
+    function GetItemUnitPrice(itemID) {
+        $.ajax({
+            async: true,
+            type: 'GET',
+            dataType: 'JSON',
+            contentType: 'application/json; charset=utf-8',
+            url: '/Order/GetItemUnitPrice',
+            data: { itemID: itemID },
+            success: function (data) {
+                //console.log(data);
+                $("#textUnitPrice").val(parseFloat(data.ItemPrice).toFixed(2));
+                $("#ImageItem").attr('src', "../Images/" + data.ItemImage);
+                $("#textItemName").val(data.ItemName);
+                $("#textItemBrand").val(data.ItemBrand);
+                //$('#textQty').val(data.Qty);
+            },
+            error: function () {
+                alert('There is some problem to process your request. Please try some other time.');
+            }
+        });
+    }
+
+</script>
+
+<style>
+    fieldset {
+        border: 5px solid /*#000*/ !important;
+        margin: 0;
+        padding: 10px;
+        position: relative;
+        border-radius: 25px;
+        background-color: #f5f5f5 /*#ecb731*/;
+        padding-left: 10px !important;
+        font-family: 'Century Gothic';
+        font-size: 14px;
+    }
+
+    legend {
+        font-size: 15px;
+        font-weight: bold;
+        margin-bottom: 0;
+        width: 35%;
+        border: 3px solid #ddd /*#000*/;
+        border-radius: 4px;
+        padding: 5px 5px 5px 15px;
+        background-color: #ffffff /*#ecb731*/;
+        color: #000;
+    }
+</style>
+
+@*<h2 class="text-capitalize text-center" style="font-family:'Century Gothic'; font-weight:800; padding-top: 12px; margin-bottom: 25px">
+        <span>K</span>im's <span>F</span>ood <span>O</span>nline <span>O</span>rder (<span>F</span>orm)
+    </h2>*@
+<div style="margin-top: 50px"></div>
+<fieldset>
+    @*<legend>
+            Customer Details
+        </legend>*@
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4" hidden>
+                <b>Operator :</b>
+                <input type="text" id="textOperator" readonly="readonly" value='@Session["username"]' name="Operator" class="form-control" autocomplete="off" style="text-transform:uppercase" />
+            </div>
+            <div class="col-md-4">
+                <b>Item Category :</b>
+                <div class="form-group">
+                    @Html.DropDownList("Category", new SelectList(Model.Item1, "Value", "Text"), new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <b>Item Size :</b>
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
+                        @Html.DropDownList("Item", new SelectList(Model.Item2, "Value", "Text"), new { @class = "form-control", style = "max-width:250px" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <b>Payment Type :</b>
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-credit-card"></i></span>
+                        @Html.DropDownList("PaymentType", new SelectList(Model.Item3, "Value", "Text"), new { @class = "form-control", style = "max-width:110px" })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</fieldset>
+<div style="padding-bottom: 20px"></div>
+<fieldset>
+    @*<legend>
+            Pick your Item
+        </legend>*@
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <b>Item Brand :</b>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-qrcode"></i></span>
+                    <input type="text" readonly="readonly" id="textItemBrand" placeholder="Enter the Item Brand" name="ItemBrand" class="form-control" style="max-width:250px" />
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <b>Item Name :</b>
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-qrcode"></i></span>
+                        <input type="text" readonly="readonly" id="textItemName" placeholder="Enter the Item Name" name="ItemName" class="form-control" style="max-width:250px" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <b>Unit Price :</b>
+                    <div class="input-group">
+                        <span class="input-group-addon"><i @*class="glyphicon glyphicon-usd"*@>R</i></span>
+                        <input type="text" readonly="readonly" id="textUnitPrice" value="0.00" name="UnitPrice" class="form-control" style="text-align: right; max-width:250px" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <img id="ImageItem" height="250" width="290" style="border: solid; margin-top: 15px" />
+                </div>
+            </div>
+            <div class="col-md-4" hidden>
+                <div class="form-group">
+                    <b>Quantinty in Stock :</b>
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-shopping-cart"></i></span>
+                        <input type="text" readonly="readonly" id="textQty" value="0.00" name="Qty" class="form-control" style="text-align: right; max-width:250px" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <b>Quantity to Sell :</b>
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-shopping-cart"></i></span>
+                        <input type="text" id="textQuantity" placeholder="0.00" name="Quantity" class="form-control" style="text-align: right; max-width:250px" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <b>Discount :</b>
+                    <div class="input-group">
+                        <span class="input-group-addon"><i @*class="glyphicon glyphicon-shopping-cart"*@>R</i></span>
+                        <input type="text" id="textDiscount" placeholder="0.00" name="Discount" class="form-control" style="text-align: right; max-width:250px" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <b>Total :</b>
+                    <div class="input-group">
+                        <span class="input-group-addon"><i @*class="glyphicon glyphicon-usd"*@>R</i></span>
+                        <input type="text" readonly="readonly" id="textTotal" value="0.00" name="Total" class="form-control" style="text-align: right; max-width:250px" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <b>Final Total Amount :</b>
+                    <div class="input-group">
+                        <span class="input-group-addon"><i @*class="glyphicon glyphicon-usd"*@>R</i></span>
+                        <input type="text" readonly="readonly" value="0.00" name="TotalAmount" id="textTotalAmount" class="form-control" style="text-align: right; max-width:250px" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <input type="button" style="margin-top: 20px; float: right; margin-right:90px;" id="btnAddToList" value="Add To List" name="AddToList" class="btn btn-primary " />
+            </div>
+        </div>
+    </div>
+</fieldset>
+<div style="padding-bottom: 20px"></div>
+<fieldset>
+    @*<legend>
+            List of All Ordered Items
+        </legend>*@
+    <table style="width: 100%" class="table table-responsive" id="tblItemList">
+        <thead class="bg-primary">
+            <tr>
+                <th hidden>
+                    Item ID
+                </th>
+                <th style="text-align: center">
+                    Item Size
+                </th>
+                <th style="text-align: center">
+                    Item Name
+                </th>
+                <th style="text-align: center">
+                    Item Brand
+                </th>
+                <th style="text-align: center">
+                    Unit Price
+                </th>
+                <th style="text-align: center">
+                    Quantity
+                </th>
+                <th style="text-align: center">
+                    Discount
+                </th>
+                <th style="text-align: center">
+                    Total
+                </th>
+                <th style="text-align: center">
+                    Action
+                </th>
+            </tr>
+        </thead>
+    </table>
+</fieldset>
+<div>
+    <input type="button" id="btnConfirm" name="Confirm" value="Confirm Order" class="btn btn-success" style="float: right; margin-top: 5px" />
+</div>
+
+
+
+

@@ -1,0 +1,155 @@
+﻿@using PagedList.Mvc
+@using PagedList
+
+@model IEnumerable<OnlineSales.ViewModels.ServiceViewModel>
+
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        function Contains(val1, val2) {
+            if (val1.indexOf(val2) != -1)
+                return true;
+        }
+        $("#SEARCH").keyup(function () {
+            var searchText = $("#SEARCH").val().toLowerCase();
+            $(".SEARCH").each(function () {
+                if (!Contains($(this).text().toLowerCase(), searchText)) {
+                    $(this).hide();
+                }
+                else {
+                    $(this).show();
+                }
+            });
+        });
+
+    });
+
+</script>
+
+<div class="container" id="divSearch" style="font-family:'Century Gothic'">
+    <div class="form-group">
+        <div class="input-group">
+            <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
+            <input type="text" id="SEARCH" placeholder="Search" class="form-control" autocomplete="off" />
+        </div>
+    </div>
+</div>
+
+<table style="width: 100%" class="table table-striped">
+    <thead class="bg-primary" style="font-family:'Century Gothic'; text-align:center">
+        <tr>
+            <th>
+                Reference No.
+            </th>
+            <th>
+                Date Created
+            </th>
+            <th>
+                Full Name
+            </th>
+            <th>
+                Phone No.
+            </th>
+            <th>
+                Unit Price
+            </th>
+            <th>
+                Quantity
+            </th>
+            <th>
+                Total
+            </th>
+            <th>
+                Operator
+            </th>
+            <th>
+                License No.
+            </th>
+            <th>
+                ODOMeter
+            </th>
+            <th>
+                VIN
+            </th>
+            <th>
+                Category
+            </th>
+        </tr>
+    </thead>
+    @*@if(Model.Count == 0) { <h2> No Record Found</h2>}
+        else { }*@
+    <tbody style="font-family:'Century Gothic'; text-align:center">
+        @foreach (var item in Model)
+        {
+        <tr class="SEARCH">
+            <td>
+                @item.OrderNumber
+            </td>
+            <td>
+                @item.CreatedOn
+            </td>
+            <td>
+                @item.CustFullName.ToUpper()
+            </td>
+            <td>
+                @item.CustPhone
+            </td>
+            <td>
+                @item.UnitPrice
+            </td>
+            <td>
+                @item.Quantity
+            </td>
+            <td>
+                @item.SubTotal
+            </td>
+            <td>
+                @item.Operator.ToUpper()
+            </td>
+            <td>
+                @if (item.LicenseNo != null)
+                {
+                    @item.LicenseNo.ToUpper()
+                }
+                else
+                {
+
+                    @item.LicenseNo
+                }
+            </td>
+            <td>
+                @if (item.ODOMeter != null)
+                {
+                    @item.ODOMeter
+                }
+                else
+                {
+                    @item.ODOMeter
+                }
+            </td>
+            <td>
+                @if (@item.VIN != null)
+                {
+                    @item.VIN.ToUpper()
+                }
+                else
+                {
+                    @item.VIN
+                }
+            </td>
+            <td>
+                @item.ServiceCategoryName.ToUpper()
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+<div>
+    <a href="@Url.Action("ExportAllServices")" class="btn btn-success" style="float: right; margin-top: 5px; "><i class="glyphicon glyphicon-print"> Print All</i></a>
+</div>
+@Html.PagedListPager((IPagedList)Model, i => Url.Action("GetAlignmentDetails", new { i }), PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new AjaxOptions() { HttpMethod = "GET", UpdateTargetId = "divLoadAlignment" }))
+
+

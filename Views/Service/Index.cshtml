@@ -1,0 +1,451 @@
+﻿@model Tuple<IEnumerable<SelectListItem>, IEnumerable<SelectListItem>>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#Service").val(0);
+
+        $('#btnAlignment').click(function () {
+            $("#divLoadAlignment").show();
+            $('#divLoadPuncture').hide();
+            $('#divLoadMechanical').hide();
+            $('#divLoadBalancing').hide();
+            $('#divLoadMagRepair').hide();
+            $("#divLoadAllServices").hide();
+            LoadAlignmentServiceDetails();
+        });
+
+        $('#btnPuncture').click(function () {
+            $('#divLoadPuncture').show();
+            $("#divLoadAlignment").hide();
+            $('#divLoadMechanical').hide();
+            $('#divLoadBalancing').hide();
+            $('#divLoadMagRepair').hide();
+            $("#divLoadAllServices").hide();
+            LoadPunctureServiceDetails();
+        });
+
+        $('#btnMagRepair').click(function () {
+            $('#divLoadPuncture').hide();
+            $("#divLoadAlignment").hide();
+            $('#divLoadMechanical').hide();
+            $('#divLoadBalancing').hide();
+            $('#divLoadMagRepair').show();
+            $("#divLoadAllServices").hide();
+            LoadMagRepairServiceDetails();
+        });
+
+        $('#btnBalancing').click(function () {
+            $('#divLoadPuncture').hide();
+            $("#divLoadAlignment").hide();
+            $('#divLoadMechanical').hide();
+            $('#divLoadBalancing').show();
+            $('#divLoadMagRepair').hide();
+            $("#divLoadAllServices").hide();
+            LoadBalancingServiceDetails();
+        });
+
+        $('#btnMechanical').click(function () {
+            $('#divLoadPuncture').hide();
+            $("#divLoadAlignment").hide();
+            $('#divLoadMechanical').show();
+            $('#divLoadBalancing').hide();
+            $('#divLoadMagRepair').hide();
+            $("#divLoadAllServices").hide();
+            LoadMechanicalServiceDetails();
+        });
+
+        $("#textPhone").keydown(function (em) {
+            if (em.altKey || em.ctrlKey || em.shiftKey) {
+                em.preventDefault();
+            }
+            else {
+                var key = em.keyCode;
+                if (!((key == 8) || (key == 46) || (key >= 35 && key <= 40) || (key >= 48 && key <= 57) || (key >= 96 && key <= 105))) {
+                    em.preventDefault();
+                }
+            }
+        });
+
+        $("#textQty").keydown(function (er) {
+            if (er.altKey || er.ctrlKey || er.shiftKey) {
+                er.preventDefault();
+            }
+            else {
+                var key = er.keyCode;
+                if (!((key == 8) || (key == 46) || (key >= 35 && key <= 40) || (key >= 48 && key <= 57) || (key >= 96 && key <= 105))) {
+                    er.preventDefault();
+                }
+            }
+        });
+
+        $("#textUnitPrice").keydown(function (emr) {
+            if (emr.altKey || emr.ctrlKey || emr.shiftKey) {
+                emr.preventDefault();
+            }
+            else {
+                var key = emr.keyCode;
+                if (!((key == 8) || (key == 46) || (key >= 35 && key <= 40) || (key >= 48 && key <= 57) || (key >= 96 && key <= 105))) {
+                    emr.preventDefault();
+                }
+            }
+        });
+
+        $("#textUnitPrice").change(function () {
+            CalculateSubTotal();
+        });
+
+        $("#btnPrintAll").click(function () {
+            $("#divLoadAllServices").show();
+            $('#divLoadPuncture').hide();
+            $("#divLoadAlignment").hide();
+            $('#divLoadMechanical').hide();
+            $('#divLoadBalancing').hide();
+            $('#divLoadMagRepair').hide();
+            LoadAllServicesDetails();
+        });
+
+        $("#btnSave").click(function () {
+            AddService();
+        });
+
+        $('#btnService').click(function () {
+            $('#divLoadPuncture').hide();
+            $("#divLoadAlignment").hide();
+            $('#divLoadMechanical').show();
+            $('#divLoadBalancing').hide();
+            $('#divLoadMagRepair').hide();
+        });
+
+        $("#Category").change(function () {
+            if ($("#Category option:selected").text() == "Tyre Puncture" || $("#Category option:selected").text() == "Wheel Balancing" || $("#Category option:selected").text() == "Mag Repair" || $("#Category option:selected").text() == "Mechanical") {
+                $("#NoNeed1").hide();
+                $("#NoNeed2").hide();
+                //$("#textUnitPrice").val(50.00);
+                ResetFields();
+            }
+            else {
+                $("#NoNeed1").show();
+                $("#NoNeed2").show();
+                //$("#textUnitPrice").val(200.00);
+                ResetFields();
+            }
+        });
+    });
+
+    function PrintItem() {
+
+    }
+
+    function ResetFields() {
+        $('#Service').val(0);
+        $("#textFullName").val('');
+        $("#textPhone").val('');
+        $("#textTotal").val('0.00');
+        $("#textMileage").val('');
+        $("#textQty").val('');
+        $("#textUnitPrice").val('');
+        $("#textLicense").val('');
+        $("#textVIN").val('');
+        $("#textFullName").focus();
+        $('#btnSave').text("Save");
+    }
+
+    function CalculateSubTotal() {
+        var unitPrice = $("#textUnitPrice").val();
+        var Qty = $("#textQty").val();
+
+        var SubTotal = (unitPrice * Qty);
+        $("#textTotal").val(parseFloat(SubTotal).toFixed(2));
+    }
+
+    function LoadAlignmentServiceDetails() {
+
+        $.ajax({
+            async: true,
+            data: 'GET',
+            dataType: 'HTML',
+            contentType: false,
+            processData: false,
+            url: '/Service/GetAlignmentDetails',
+            success: function (data) {
+                $("#divLoadAlignment").html(data);
+            },
+            error: function () {
+                alert('There is some problem to process your request. Please try some other time.[GET]');
+            }
+        });
+    }
+
+    function LoadPunctureServiceDetails() {
+
+        $.ajax({
+            async: true,
+            data: 'GET',
+            dataType: 'HTML',
+            contentType: false,
+            processData: false,
+            url: '/Service/GetPunctureDetails',
+            success: function (data) {
+                $("#divLoadPuncture").html(data);
+            },
+            error: function () {
+                alert('There is some problem to process your request. Please try some other time.[GET]');
+            }
+        });
+    }
+
+    function LoadMagRepairServiceDetails() {
+
+        $.ajax({
+            async: true,
+            data: 'GET',
+            dataType: 'HTML',
+            contentType: false,
+            processData: false,
+            url: '/Service/GetMagRepairDetails',
+            success: function (data) {
+                $("#divLoadMagRepair").html(data);
+            },
+            error: function () {
+                alert('There is some problem to process your request. Please try some other time.[GET]');
+            }
+        });
+    }
+
+    function LoadBalancingServiceDetails() {
+
+        $.ajax({
+            async: true,
+            data: 'GET',
+            dataType: 'HTML',
+            contentType: false,
+            processData: false,
+            url: '/Service/GetBalancingDetails',
+            success: function (data) {
+                $("#divLoadBalancing").html(data);
+            },
+            error: function () {
+                alert('There is some problem to process your request. Please try some other time.[GET]');
+            }
+        });
+    }
+
+    function LoadMechanicalServiceDetails() {
+
+        $.ajax({
+            async: true,
+            data: 'GET',
+            dataType: 'HTML',
+            contentType: false,
+            processData: false,
+            url: '/Service/GetMechanicalDetails',
+            success: function (data) {
+                $("#divLoadMechanical").html(data);
+            },
+            error: function () {
+                alert('There is some problem to process your request. Please try some other time.[GET]');
+            }
+        });
+    }
+
+    function LoadAllServicesDetails() {
+
+        $.ajax({
+            async: true,
+            data: 'GET',
+            dataType: 'HTML',
+            contentType: false,
+            processData: false,
+            url: '/Service/GetAllServices',
+            success: function (data) {
+                $("#divLoadAllServices").html(data);
+            },
+            error: function () {
+                alert('There is some problem to process your request. Please try some other time.[GET]');
+            }
+        });
+    }
+
+    function AddService() {
+
+        var objServiceViewModel = {};
+
+        objServiceViewModel.CustFullName = $("#textFullName").val();
+        objServiceViewModel.CustPhone = $("#textPhone").val();
+        objServiceViewModel.UnitPrice = $("#textUnitPrice").val();
+        objServiceViewModel.Quantity = $("#textQty").val();
+        objServiceViewModel.SubTotal = $("#textTotal").val();
+        objServiceViewModel.Operator = $("#textOperator").val();
+        objServiceViewModel.LicenseNo = $("#textLicense").val();
+        objServiceViewModel.ODOMeter = $("#textMileage").val();
+        objServiceViewModel.VIN = $("#textVIN").val();
+        objServiceViewModel.ServID = $("#Service").val();
+        objServiceViewModel.ServCategoryID = $("#Category").val();
+
+        if ($("#textFullName").val() == '') {
+            alert('Please Enter the Customer FullName'); $("#textFullName").focus();
+        }
+        else if ($("#textPhone").val() == '') {
+            alert('Please Enter the Customer Phone No.'); $("#textPhone").focus();
+        }
+        else if ($("#textQty").val() == '') {
+            alert('Please Enter the Quantity.'); $("#textQty").focus();
+        }
+        else {
+            $.ajax({
+                async: true,
+                type: 'POST',
+                dataType: 'JSON',
+                contentType: 'application/json; charset=utf-8',
+                url: '/Service/DoServices',
+                data: JSON.stringify(objServiceViewModel),
+                success: function (data) {
+                    console.log(data);
+                    $("#textOperator").html(data);
+                    alert(data);
+                    ResetFields();
+                },
+                error: function () {
+                    alert('There is some problem to process your request. Please try some other time.[POST]');
+                }
+            });
+        }
+    }
+
+</script>
+
+<h2 class="text-center text-uppercase">Bicc Tyres & Wheels - Other Services</h2>
+
+<div style="margin-bottom:55px"></div>
+<div class="container" style="margin-top: 25px; font-family: 'Century Gothic'">
+    <div class="row">
+        <div class="form-group col-lg-2">
+            <button type="button" id="btnPrintAll" class="btn btn-danger">Print All Services</button>
+        </div> 
+    </div>
+</div>
+<div class="container" style="margin-top: 25px; font-family: 'Century Gothic'">
+    <div class="row">
+        <div class="form-group col-md-2">
+            <button type="button" id="btnService" class="btn btn-success" data-toggle="modal" data-target="#divAnyServices" data-keyboard="false" data-backdrop="static">Add a Service</button>
+        </div>
+        <div class="form-group col-md-2">
+            <button type="button" id="btnAlignment" class="btn btn-primary">Wheel Alignment</button>
+        </div>
+        <div class="form-group col-md-2">
+            <button type="button" id="btnPuncture" class="btn btn-success">Tyre Puncture</button>
+        </div>
+        <div class="form-group col-md-2">
+            <button type="button" id="btnBalancing" class="btn btn-primary">Wheel Balancing</button>
+        </div>
+        <div class="form-group col-md-2">
+            <button type="button" id="btnMagRepair" class="btn btn-success">Mag Repair</button>
+        </div>
+        <div class="form-group col-md-2">
+            <button type="button" id="btnMechanical" class="btn btn-primary">Mechanical</button>
+        </div>
+    </div>
+</div>
+
+<div id="divAnyServices" class="modal fade" role="dialog" style="font-family:'Century Gothic'">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Add A New Service</h4>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    @Html.HiddenFor(model => model.Item1, new { @id = "Service" })
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group col-md-6">
+                                <b>Category :</b>
+                                @Html.DropDownList("Category", new SelectList(Model.Item2, "Value", "Text"), new { @class = "form-control" })
+                            </div>
+                            <div class="form-group col-md-6" hidden>
+                                <b>Operator :</b>
+                                <input type="text" id="textOperator" readonly="readonly" value='@Session["username"]' name="Operator" class="form-control" autocomplete="off" style="text-transform:uppercase" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group col-md-6">
+                                <b>Customer FullName :</b>
+                                <input type="text" id="textFullName" placeholder="Please enter the Full Name" name="FullName" class="form-control" autocomplete="off" style="text-transform:capitalize" />
+                            </div>
+                            <div class="form-group col-md-6">
+                                <b>Customer Phone No. :</b>
+                                <input type="text" id="textPhone" placeholder="Please enter the Phone No." name="Phone" class="form-control" autocomplete="off" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" id="NoNeed1">
+                        <div class="col-md-6">
+                            <div class="form-group col-md-6">
+                                <b>License No. :</b>
+                                <input type="text" id="textLicense" placeholder="Please enter the License No." name="License" class="form-control" autocomplete="off" style="text-transform:uppercase" />
+                            </div>
+                            <div class="form-group col-md-6">
+                                <b>VIN :</b>
+                                <input type="text" id="textVIN" placeholder="Please enter the VIN" name="VIN" class="form-control" autocomplete="off" style="text-transform:uppercase" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group col-md-6" id="NoNeed2">
+                                <b>Vehicle Mileage (ODOMeter) :</b>
+                                <input type="text" id="textMileage" placeholder="Please enter the Vehicle(Km/H)" name="Mileage" class="form-control" autocomplete="off" style="text-transform:uppercase" />
+                            </div>
+                            <div class="form-group col-md-6">
+                                <b>Quantity :</b>
+                                <input type="text" id="textQty" placeholder="0.00" name="Quantity" class="form-control" autocomplete="off" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group col-md-6">
+                                <b>Unit Price :</b>
+                                <input type="text" id="textUnitPrice" placeholder="0.00" name="UnitPrice" class="form-control" autocomplete="off" />
+                            </div>
+                            <div class="form-group col-md-6">
+                                <b>SubTotal :</b>
+                                <input type="text" id="textTotal" readonly="readonly" value="0.00" name="Total" class="form-control" autocomplete="off" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnSave" class="btn btn-success">Save</button> &nbsp;
+                <button type="button" id="btnClose" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div style="margin-bottom:15px"></div>
+
+<div id="divLoadAlignment"></div>
+
+<div id="divLoadPuncture"></div>
+
+<div id="divLoadBalancing"></div>
+
+<div id="divLoadMagRepair"></div>
+
+<div id="divLoadMechanical"></div>
+
+<div id="divLoadAllServices"></div>
+
